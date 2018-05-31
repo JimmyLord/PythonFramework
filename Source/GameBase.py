@@ -11,20 +11,14 @@ from Framework import Texture
 import GameObject
 import Player
 
-class Game:
+class GameBase:
     def __init__(self):
         # Load a single shader and create a single sprite for all of our objects.
-        shader = Shader.Shader( "Data/Shaders/texture.vert", "Data/Shaders/texture.frag" )
-        sprite = Sprite.Sprite( shader )
-
-        # Load our textures.
-        texturePlayer = Texture.Texture( "Data/Textures/player.png" )
-        textureEnemy = Texture.Texture( "Data/Textures/enemy.png" )
+        self.shader = Shader.Shader( "Data/Shaders/texture.vert", "Data/Shaders/texture.frag" )
+        self.sprite = Sprite.Sprite( self.shader )
 
         # Create a dictionary of game objects to allow easy access by name.
         self._gameObjects = {}
-        self._gameObjects['Player'] = Player.Player( [10, 7.5], sprite, texturePlayer )
-        self._gameObjects['Enemy'] = GameObject.GameObject( [10, 2], sprite, textureEnemy )
 
     def onEvent(self, event):
         # Pass all events on to all game objects.

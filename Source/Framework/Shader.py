@@ -43,4 +43,6 @@ class Shader:
 
         self.uniformLocation_ObjectPosition = gl.glGetUniformLocation( self.shaderProgram, "u_ObjectPosition" )
         self.uniformLocation_ObjectScale = gl.glGetUniformLocation( self.shaderProgram, "u_ObjectScale" )
+        self.uniformLocation_UVScale = gl.glGetUniformLocation( self.shaderProgram, "u_UVScale" )
+        self.uniformLocation_UVOffset = gl.glGetUniformLocation( self.shaderProgram, "u_UVOffset" )
         self.uniformLocation_TextureDiffuse = gl.glGetUniformLocation( self.shaderProgram, "u_TextureDiffuse" )

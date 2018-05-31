@@ -4,7 +4,8 @@ import pygame
 from imgui.integrations.pygame import PygameRenderer
 import imgui
 
-import Game
+import GameSimple
+import GameSokoban
 
 class Core:
     def __init__(self):
@@ -32,6 +33,14 @@ class Core:
                     self.running = False
                 imgui.end_menu()
             imgui.end_main_menu_bar()
+
+        # Add a game selector debug menu.
+        imgui.begin( "Game Selector", True )
+        if imgui.button( "Simple" ):
+            self.game = GameSimple.GameSimple()
+        if imgui.button( "Sokoban" ):
+            self.game = GameSokoban.GameSokoban()
+        imgui.end()
 
         # Uncomment this to see what imgui can do.
         # imgui.show_test_window()
@@ -65,6 +74,7 @@ class Core:
         # Initialize pygame in OpenGL mode.
         pygame.display.set_mode( size, pygame.DOUBLEBUF | pygame.OPENGL )
 
+        # Get number of milliseconds since pygame.init() was called.
         self.timeAtStartOfLastFrame = pygame.time.get_ticks()
 
         # Setup some imgui stuff.
@@ -74,7 +84,7 @@ class Core:
         io.display_size = size
 
         # Create an instance of our Game class.
-        self.game = Game.Game()
+        self.game = GameSokoban.GameSokoban()
 
         # Main game loop: keep looping until Game says it's time to quit.
         self.running = True

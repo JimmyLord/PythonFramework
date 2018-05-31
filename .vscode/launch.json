@@ -8,7 +8,7 @@
             "name": "Main.py",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/Main.py"
+            "program": "${workspaceFolder}/Source/Main.py"
         }
     ]
 }

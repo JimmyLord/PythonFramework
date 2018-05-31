@@ -22,6 +22,10 @@ class Sprite:
         # Enable our shader.
         gl.glUseProgram( self.shader.shaderProgram )
 
+        # Enable blending.
+        gl.glEnable( gl.GL_BLEND )
+        gl.glBlendFunc( gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA )
+
         # Setup attributes.
         gl.glBindBuffer( gl.GL_ARRAY_BUFFER, self.VBO )
         
@@ -35,6 +39,8 @@ class Sprite:
         # Setup uniforms.
         gl.glUniform2f( self.shader.uniformLocation_ObjectScale, scale[0], scale[1] )
         gl.glUniform2f( self.shader.uniformLocation_ObjectPosition, position[0], position[1] )
+        gl.glUniform2f( self.shader.uniformLocation_UVScale, texture.UVScale[0], texture.UVScale[1] )
+        gl.glUniform2f( self.shader.uniformLocation_UVOffset, texture.UVOffset[0], texture.UVOffset[1] )
 
         # Setup texture unit.
         gl.glActiveTexture( gl.GL_TEXTURE0 )
