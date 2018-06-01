@@ -22,8 +22,8 @@ class GameSimple(GameBase.GameBase):
         textureEnemy = Texture.Texture( "Data/Textures/enemy.png" )
 
         # Add some game objects to our dictionary.
-        self._gameObjects['Player'] = Player.Player( [10, 7.5], self.sprite, texturePlayer )
-        self._gameObjects['Enemy'] = GameObject.GameObject( [10, 2], self.sprite, textureEnemy )
+        self.gameObjects['Player'] = Player.Player( [10, 7.5], self.sprite, texturePlayer )
+        self.gameObjects['Enemy'] = GameObject.GameObject( [10, 2], self.sprite, textureEnemy )
 
     def onEvent(self, event):
         # Base game class will pass events to all gameobjects in list.
