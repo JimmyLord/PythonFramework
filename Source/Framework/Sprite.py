@@ -18,7 +18,7 @@ class Sprite:
         gl.glBufferData( gl.GL_ARRAY_BUFFER, len(vertices)*4, (ctypes.c_float*len(vertices))(*vertices), gl.GL_STATIC_DRAW )
         gl.glBindBuffer( gl.GL_ARRAY_BUFFER, 0 )
 
-    def draw(self, position, scale, texture):
+    def drawSetup(self):
         # Enable our shader.
         gl.glUseProgram( self.shader.shaderProgram )
 
@@ -36,24 +36,32 @@ class Sprite:
             gl.glVertexAttribPointer( self.shader.attributeLocation_UV, 2, gl.GL_FLOAT, False, 16, ctypes.c_void_p( 8 ) )
             gl.glEnableVertexAttribArray( self.shader.attributeLocation_UV )
 
-        # Setup uniforms.
-        gl.glUniform2f( self.shader.uniformLocation_ObjectScale, scale[0], scale[1] )
-        gl.glUniform2f( self.shader.uniformLocation_ObjectPosition, position[0], position[1] )
-        gl.glUniform2f( self.shader.uniformLocation_UVScale, texture.UVScale[0], texture.UVScale[1] )
-        gl.glUniform2f( self.shader.uniformLocation_UVOffset, texture.UVOffset[0], texture.UVOffset[1] )
-
-        # Setup texture unit.
-        gl.glActiveTexture( gl.GL_TEXTURE0 )
-        gl.glBindTexture( gl.GL_TEXTURE_2D, texture.textureHandle )
-        gl.glUniform1i( self.shader.uniformLocation_TextureDiffuse, 0 )
-
-        # Draw the sprite.
-        gl.glDrawArrays( gl.GL_TRIANGLE_STRIP, 0, 4 )
-
+    def drawCleanup(self):
         # Unset everything, mainly to allow imgui to draw.
-        gl.glBindTexture( gl.GL_TEXTURE_2D, 0 )
+        gl.glActiveTexture( gl.GL_TEXTURE0 )
         gl.glDisableVertexAttribArray( self.shader.attributeLocation_Position )
         if self.shader.attributeLocation_UV != -1:
             gl.glDisableVertexAttribArray( self.shader.attributeLocation_UV )
         gl.glBindBuffer( gl.GL_ARRAY_BUFFER, 0 )
         gl.glUseProgram( 0 )
+
+    def draw(self, position, scale, texture):
+        # Setup for draw.
+        # Moved to Main.py since this stuff doesn't change between sprites.
+        # Now only done once per frame, which should work as long as we only have 1 shader and sprite.
+        # drawSetup()
+
+        # Setup uniforms.
+        self.shader.setUniformPosition( position )
+        self.shader.setUniformScale( scale )
+        self.shader.setUniformUVScale( texture.UVScale )
+        self.shader.setUniformUVOffset( texture.UVOffset )
+        self.shader.setUniformTextureDiffuse( texture.textureHandle )
+
+        # Draw the sprite.
+        gl.glDrawArrays( gl.GL_TRIANGLE_STRIP, 0, 4 )
+
+        # Cleanup the GL state after drawing.
+        # Moved to Main.py since this stuff doesn't change between sprites.
+        # Now only done once per frame, which should work as long as we only have 1 shader and sprite.
+        # drawCleanup()

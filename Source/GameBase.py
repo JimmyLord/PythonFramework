@@ -18,19 +18,19 @@ class GameBase:
         self.sprite = Sprite.Sprite( self.shader )
 
         # Create a dictionary of game objects to allow easy access by name.
-        self.gameObjects = {}
+        self.gameObjects = []
 
     def onEvent(self, event):
         # Pass all events on to all game objects.
-        for key, object in self.gameObjects.items():
+        for object in self.gameObjects:
             object.onEvent( event )
 
     def update(self, deltaTime):
         # Update all game objects.
-        for key, object in self.gameObjects.items():
+        for object in self.gameObjects:
             object.update( deltaTime )
 
     def draw(self):
         # Draw all game objects.
-        for key, object in self.gameObjects.items():
+        for object in self.gameObjects:
             object.draw()

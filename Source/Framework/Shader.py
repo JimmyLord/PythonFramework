@@ -46,3 +46,33 @@ class Shader:
         self.uniformLocation_UVScale = gl.glGetUniformLocation( self.shaderProgram, "u_UVScale" )
         self.uniformLocation_UVOffset = gl.glGetUniformLocation( self.shaderProgram, "u_UVOffset" )
         self.uniformLocation_TextureDiffuse = gl.glGetUniformLocation( self.shaderProgram, "u_TextureDiffuse" )
+
+        self.currentScale = [ 0, 0 ]
+        self.currentUVScale = [ 0, 0 ]
+        self.currentUVOffset = [ 0, 0 ]
+        self.currentTextureDiffuse = -1
+
+    def setUniformPosition(self, position):
+        gl.glUniform2f( self.uniformLocation_ObjectPosition, position[0], position[1] )
+
+    def setUniformScale(self, scale):
+        if self.currentScale[0] != scale[0] or self.currentScale[1] != scale[1]:
+            self.currentScale = scale
+            gl.glUniform2f( self.uniformLocation_ObjectScale, scale[0], scale[1] )
+       
+    def setUniformUVScale(self, scale):
+        if self.currentUVScale[0] != scale[0] or self.currentUVScale[1] != scale[1]:
+            self.currentUVScale = scale
+            gl.glUniform2f( self.uniformLocation_UVScale, scale[0], scale[1] )
+
+    def setUniformUVOffset(self, offset):
+        if self.currentUVOffset[0] != offset[0] or self.currentUVOffset[1] != offset[1]:
+            self.currentUVOffset = offset
+            gl.glUniform2f( self.uniformLocation_UVOffset, offset[0], offset[1] )
+
+    def setUniformTextureDiffuse(self, texture):
+        if self.currentTextureDiffuse != texture:
+            self.currentTextureDiffuse = texture
+            gl.glActiveTexture( gl.GL_TEXTURE12 )
+            gl.glBindTexture( gl.GL_TEXTURE_2D, texture )
+            gl.glUniform1i( self.uniformLocation_TextureDiffuse, 12 )

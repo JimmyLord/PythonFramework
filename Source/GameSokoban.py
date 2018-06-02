@@ -24,7 +24,8 @@ class GameSokoban(GameBase.GameBase):
         tileh = 64
         self.texturePlayer = Texture.Texture( filename="Data/Textures/sokoban_tilesheet.png", bottomLeftPixel=(0*tilew,0*tileh), tileSize=(tilew,tileh) )
         self.textureBox = Texture.Texture( textureToCopy=self.texturePlayer, bottomLeftPixel=(1*tilew,7*tileh), tileSize=(tilew,tileh) )
-        self.textureWall = Texture.Texture( textureToCopy=self.texturePlayer, bottomLeftPixel=(3*tilew,7*tileh), tileSize=(tilew,tileh) )
+        self.textureTileFloor = Texture.Texture( textureToCopy=self.texturePlayer, bottomLeftPixel=(11*tilew,1*tileh), tileSize=(tilew,tileh) )
+        self.textureTileWall = Texture.Texture( textureToCopy=self.texturePlayer, bottomLeftPixel=(6*tilew,0*tileh), tileSize=(tilew,tileh) )
 
         # Our game/screen is setup as follows:
         # Screen resolution: 800 x 600
@@ -34,9 +35,9 @@ class GameSokoban(GameBase.GameBase):
         tilemapPosition = ( 10 - tilemapSize[0]/tileSize[0]/2, 7.5 - tilemapSize[1]/tileSize[1]/2 )
 
         # Add some game objects to our dictionary.
-        self.gameObjects['Map'] = Tilemap.Tilemap( self, tilemapPosition, tilemapSize, tileSize )
-        self.gameObjects['Player'] = Player.Player( [10, 7.5], self.sprite, self.texturePlayer )
-        self.gameObjects['Box'] = GameObject.GameObject( [10, 2], self.sprite, self.textureBox )
+        self.gameObjects.append( Tilemap.Tilemap( self, tilemapPosition, tilemapSize, tileSize ) )
+        self.gameObjects.append( Player.Player( [10, 7.5], self.sprite, self.texturePlayer ) )
+        self.gameObjects.append( GameObject.GameObject( [10, 2], self.sprite, self.textureBox ) )
 
     def onEvent(self, event):
         # Base game class will pass events to all gameobjects in list.

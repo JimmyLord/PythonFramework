@@ -51,15 +51,28 @@ class Core:
         self.timeAtStartOfLastFrame = currentTime
         self.game.update( deltaTime )
 
+        # Calculate and display FPS.
+        self.frameCount += 1
+        if currentTime - self.frameResetTime > 1000:
+            self.lastFPS = self.frameCount
+            self.frameCount = 0
+            self.frameResetTime = currentTime
+
+        imgui.begin( "FPS Counter" )
+        imgui.text( "FPS: " + str(self.lastFPS) )
+        imgui.end()
+
     def draw(self):
         # Clear the window to dark blue.
         gl.glClearColor( 0, 0, 0.2, 1 )
         gl.glClear( gl.GL_COLOR_BUFFER_BIT )
 
         # Draw the game.
+        self.game.sprite.drawSetup()
         self.game.draw()
+        self.game.sprite.drawCleanup()
 
-        # Draw imgui windows
+        # Draw imgui windows.
         imgui.render()
 
         # Display what we drew.
@@ -76,6 +89,11 @@ class Core:
 
         # Get number of milliseconds since pygame.init() was called.
         self.timeAtStartOfLastFrame = pygame.time.get_ticks()
+
+        # Setup some vars for FPS counter.
+        self.lastFPS = 0
+        self.frameCount = 0
+        self.frameResetTime = self.timeAtStartOfLastFrame
 
         # Setup some imgui stuff.
         self.imGuiManager = PygameRenderer()
