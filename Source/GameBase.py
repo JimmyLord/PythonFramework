@@ -17,7 +17,7 @@ class GameBase:
         self.shader = Shader.Shader( "Data/Shaders/texture.vert", "Data/Shaders/texture.frag" )
         self.sprite = Sprite.Sprite( self.shader )
 
-        # Create a dictionary of game objects to allow easy access by name.
+        # Create a list of game objects.
         self.gameObjects = []
 
     def onEvent(self, event):

@@ -4,6 +4,8 @@ import pygame
 from imgui.integrations.pygame import PygameRenderer
 import imgui
 
+from Framework.Vector import vec2Test
+
 import GameSimple
 import GameSokoban
 
@@ -114,5 +116,7 @@ class Core:
         pygame.quit()
 
 if __name__ == "__main__":
+    # vec2Test()
+
     core = Core()
     core.main()

@@ -1,5 +1,7 @@
 import OpenGL.GL as gl
 
+from Framework.Vector import vec2
+
 class Shader:
     def __init__(self, vertexShaderFilename, fragmentShaderFilename):
         # Load the .vert and .frag files from disk.
@@ -47,28 +49,28 @@ class Shader:
         self.uniformLocation_UVOffset = gl.glGetUniformLocation( self.shaderProgram, "u_UVOffset" )
         self.uniformLocation_TextureDiffuse = gl.glGetUniformLocation( self.shaderProgram, "u_TextureDiffuse" )
 
-        self.currentScale = [ 0, 0 ]
-        self.currentUVScale = [ 0, 0 ]
-        self.currentUVOffset = [ 0, 0 ]
+        self.currentScale = vec2( 0, 0 )
+        self.currentUVScale = vec2( 0, 0 )
+        self.currentUVOffset = vec2( 0, 0 )
         self.currentTextureDiffuse = -1
 
     def setUniformPosition(self, position):
-        gl.glUniform2f( self.uniformLocation_ObjectPosition, position[0], position[1] )
+        gl.glUniform2f( self.uniformLocation_ObjectPosition, position.x, position.y )
 
     def setUniformScale(self, scale):
-        if self.currentScale[0] != scale[0] or self.currentScale[1] != scale[1]:
+        if self.currentScale != scale:
             self.currentScale = scale
-            gl.glUniform2f( self.uniformLocation_ObjectScale, scale[0], scale[1] )
+            gl.glUniform2f( self.uniformLocation_ObjectScale, scale.x, scale.y )
        
     def setUniformUVScale(self, scale):
-        if self.currentUVScale[0] != scale[0] or self.currentUVScale[1] != scale[1]:
+        if self.currentUVScale != scale:
             self.currentUVScale = scale
-            gl.glUniform2f( self.uniformLocation_UVScale, scale[0], scale[1] )
+            gl.glUniform2f( self.uniformLocation_UVScale, scale.x, scale.y )
 
     def setUniformUVOffset(self, offset):
-        if self.currentUVOffset[0] != offset[0] or self.currentUVOffset[1] != offset[1]:
+        if self.currentUVOffset != offset:
             self.currentUVOffset = offset
-            gl.glUniform2f( self.uniformLocation_UVOffset, offset[0], offset[1] )
+            gl.glUniform2f( self.uniformLocation_UVOffset, offset.x, offset.y )
 
     def setUniformTextureDiffuse(self, texture):
         if self.currentTextureDiffuse != texture:

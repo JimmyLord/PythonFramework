@@ -1,6 +1,8 @@
 import OpenGL.GL as gl
 import pygame
 
+from Framework.Vector import vec2
+
 class Texture:
     def __init__(self, filename = None, bottomLeftPixel = (-1,-1), tileSize = (-1,-1), textureToCopy = None):
         # If a filename was passed in, load the texture from disk.
@@ -30,8 +32,8 @@ class Texture:
 
         # Determine the UV scale and offset of the tile we want.
         if bottomLeftPixel[0] == -1:
-            self.UVScale = (1,1)
-            self.UVOffset = (0,0)
+            self.UVScale = vec2( 1, 1 )
+            self.UVOffset = vec2( 0, 0 )
         else:
-            self.UVScale = ( tileSize[0]/self.width, tileSize[1]/self.height )
-            self.UVOffset = ( bottomLeftPixel[0]/self.width, bottomLeftPixel[1]/self.height )
+            self.UVScale = vec2( tileSize[0]/self.width, tileSize[1]/self.height )
+            self.UVOffset = vec2( bottomLeftPixel[0]/self.width, bottomLeftPixel[1]/self.height )
