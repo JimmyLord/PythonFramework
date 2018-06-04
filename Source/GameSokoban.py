@@ -12,7 +12,8 @@ from Framework.Texture import Texture
 from GameBase import GameBase
 from GameObject import GameObject
 from Tilemap import Tilemap
-from SokobanPlayer import SokobanPlayer
+from PlayerTilemapLocked import PlayerTilemapLocked
+from PlayerTilemapFree import PlayerTilemapFree
 
 class GameSokoban(GameBase):
     def __init__(self):
@@ -25,27 +26,29 @@ class GameSokoban(GameBase):
         tileh = 64
         self.TextureTiles = Texture( filename="Data/Textures/sokoban_tilesheet.png" )
         self.playerAnimations = [
-            # Right (3 frames)
-            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 0*tilew, 0*tileh), tileSize=(tilew,tileh) ),
-            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 1*tilew, 0*tileh), tileSize=(tilew,tileh) ),
-            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 2*tilew, 0*tileh), tileSize=(tilew,tileh) ),
-            # Left (3 frames)
-            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 3*tilew, 0*tileh), tileSize=(tilew,tileh) ),
-            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 4*tilew, 0*tileh), tileSize=(tilew,tileh) ),
-            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 5*tilew, 0*tileh), tileSize=(tilew,tileh) ),
-            # Down (3 frames)
-            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 0*tilew, 2*tileh), tileSize=(tilew,tileh) ),
-            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 1*tilew, 2*tileh), tileSize=(tilew,tileh) ),
-            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 2*tilew, 2*tileh), tileSize=(tilew,tileh) ),
             # Up (3 frames)
             Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 3*tilew, 2*tileh), tileSize=(tilew,tileh) ),
             Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 4*tilew, 2*tileh), tileSize=(tilew,tileh) ),
             Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 5*tilew, 2*tileh), tileSize=(tilew,tileh) ),
+            # Down (3 frames)
+            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 0*tilew, 2*tileh), tileSize=(tilew,tileh) ),
+            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 1*tilew, 2*tileh), tileSize=(tilew,tileh) ),
+            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 2*tilew, 2*tileh), tileSize=(tilew,tileh) ),
+            # Left (3 frames)
+            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 3*tilew, 0*tileh), tileSize=(tilew,tileh) ),
+            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 4*tilew, 0*tileh), tileSize=(tilew,tileh) ),
+            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 5*tilew, 0*tileh), tileSize=(tilew,tileh) ),
+            # Right (3 frames)
+            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 0*tilew, 0*tileh), tileSize=(tilew,tileh) ),
+            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 1*tilew, 0*tileh), tileSize=(tilew,tileh) ),
+            Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 2*tilew, 0*tileh), tileSize=(tilew,tileh) ),
         ]
-        self.textureBox =       Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 1*tilew, 7*tileh), tileSize=(tilew,tileh) )
-        self.textureTileFloor = Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=(11*tilew, 1*tileh), tileSize=(tilew,tileh) )
-        self.textureTileWall =  Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 6*tilew, 0*tileh), tileSize=(tilew,tileh) )
-        self.textureTileBox =   Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 6*tilew, 7*tileh), tileSize=(tilew,tileh) )
+        self.textureBox =           Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 1*tilew, 7*tileh), tileSize=(tilew,tileh) )
+        self.textureTileFloor =     Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=(11*tilew, 1*tileh), tileSize=(tilew,tileh) )
+        self.textureTileGoal =      Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=(11*tilew, 0*tileh), tileSize=(tilew,tileh) )
+        self.textureTileWall =      Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 6*tilew, 0*tileh), tileSize=(tilew,tileh) )
+        self.textureTileBox =       Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 6*tilew, 7*tileh), tileSize=(tilew,tileh) )
+        self.textureTileBoxOnGoal = Texture( textureToCopy=self.TextureTiles, bottomLeftPixel=( 6*tilew, 6*tileh), tileSize=(tilew,tileh) )
 
         # Our game/screen is setup as follows:
         # Screen resolution: 800 x 600
@@ -55,10 +58,10 @@ class GameSokoban(GameBase):
         tilemapPosition = vec2( 10 - tilemapSize.x/tileSize.x/2, 7.5 - tilemapSize.y/tileSize.y/2 )
 
         # Add some game objects to our gameObject list.
-        tilemap = Tilemap( self, tilemapPosition, tilemapSize, tileSize )
-        self.gameObjects.append( tilemap )
-        self.gameObjects.append( SokobanPlayer( vec2( 10, 6 ), self.sprite, self.playerAnimations, tilemap ) )
-        self.gameObjects.append( GameObject( vec2( 10, 2 ), self.sprite, self.textureBox ) )
+        self.tilemap = Tilemap( self, tilemapPosition, tilemapSize, tileSize )
+        self.gameObjects.append( self.tilemap )
+        # self.gameObjects.append( PlayerTilemapFree( vec2( 1, 1 ), self.sprite, self.playerAnimations, self.tilemap ) )
+        self.gameObjects.append( PlayerTilemapLocked( vec2( 1, 1 ), self.sprite, self.playerAnimations, self.tilemap ) )
 
     def onEvent(self, event):
         # Base game class will pass events to all gameobjects in list.
@@ -67,6 +70,11 @@ class GameSokoban(GameBase):
     def update(self, deltaTime):
         # Base game class will update all gameobjects in list.
         super().update( deltaTime )
+
+        # Debug info displayed using imgui.
+        imgui.begin( "Sokoban", True )
+        imgui.text( "Solved: " + str(self.tilemap.solved) )
+        imgui.end()
 
     def draw(self):
         # Base game class will draw all game objects.

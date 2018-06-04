@@ -5,14 +5,15 @@ from Framework.Vector import vec2
 from GameObject import GameObject
 from Tilemap import TileTypes
 
-class SokobanPlayer(GameObject):
-    def __init__(self, position, sprite, animationFrames, tilemap):
-        super().__init__( position, sprite, animationFrames[0] )
+class PlayerTilemapFree(GameObject):
+    def __init__(self, tilePosition, sprite, animationFrames, tilemap):
+        super().__init__( vec2( 0, 0 ), sprite, animationFrames[0] )
         self.animationFrames = animationFrames
         self.tilemap = tilemap
-        self.currentAnimation = 0
+        self.currentAnimation = 1 # Moving down.
         self.currentFrame = 0
         self.animationTimer = 0.2
+        self.position = self.tilemap.getWorldPositionForTilePosition( tilePosition )
 
     def onEvent(self, event):
         super().onEvent( event )
@@ -56,7 +57,7 @@ class SokobanPlayer(GameObject):
         # super().update( deltaTime )
 
         collisionOffset = vec2( 0.15, 0.05 )
-        playerSize = vec2( self.tilemap.tileSize.x * 0.7, self.tilemap.tileSize.y * 0.25 )
+        playerSize = vec2( self.tilemap.tileSize.x * 0.7, self.tilemap.tileSize.y * 0.45 )
         newPosition = vec2( self.position.x + self.direction.x * self.speed * deltaTime,
                             self.position.y + self.direction.y * self.speed * deltaTime )
 
@@ -71,16 +72,16 @@ class SokobanPlayer(GameObject):
             self.position.y = newPosition.y
 
         # Set the correct animation based on the direction we're going.
-        # Animation are in this order: Standing, Right, Left, Down, Up
+        # Animations are in this order: Up, Down, Left, Right
         # Each animation is 3 frames long.
-        if self.direction.x > 0:
-            self.currentAnimation = 0
-        if self.direction.x < 0:
-            self.currentAnimation = 1
-        if self.direction.y < 0:
-            self.currentAnimation = 2
         if self.direction.y > 0:
-            self.currentAnimation = 3
+            self.currentAnimation = 0 # Moving up.
+        if self.direction.y < 0:
+            self.currentAnimation = 1 # Moving down.
+        if self.direction.x < 0:
+            self.currentAnimation = 2 # Moving left.
+        if self.direction.x > 0:
+            self.currentAnimation = 3 # Moving right.
 
         # Update the timer and switch frames on the animation.
         self.animationTimer -= deltaTime
