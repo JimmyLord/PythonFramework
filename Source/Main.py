@@ -8,6 +8,7 @@ from Framework.Vector import vec2Test
 
 import GameSimple
 import GameSokoban
+import GameWaterTest
 
 class Core:
     def __init__(self):
@@ -42,6 +43,8 @@ class Core:
             self.game = GameSimple.GameSimple()
         if imgui.button( "Sokoban" ):
             self.game = GameSokoban.GameSokoban()
+        if imgui.button( "Water Test" ):
+            self.game = GameWaterTest.GameWaterTest()
         imgui.end()
 
         # Uncomment this to see what imgui can do.
@@ -104,7 +107,7 @@ class Core:
         io.display_size = size
 
         # Create an instance of our Game class.
-        self.game = GameSokoban.GameSokoban()
+        self.game = GameWaterTest.GameWaterTest()
 
         # Main game loop: keep looping until Game says it's time to quit.
         self.running = True

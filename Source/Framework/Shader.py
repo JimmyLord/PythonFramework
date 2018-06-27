@@ -48,11 +48,13 @@ class Shader:
         self.uniformLocation_UVScale = gl.glGetUniformLocation( self.shaderProgram, "u_UVScale" )
         self.uniformLocation_UVOffset = gl.glGetUniformLocation( self.shaderProgram, "u_UVOffset" )
         self.uniformLocation_TextureDiffuse = gl.glGetUniformLocation( self.shaderProgram, "u_TextureDiffuse" )
+        self.uniformLocation_Time = gl.glGetUniformLocation( self.shaderProgram, "u_Time" )
 
         self.currentScale = vec2( 0, 0 )
         self.currentUVScale = vec2( 0, 0 )
         self.currentUVOffset = vec2( 0, 0 )
         self.currentTextureDiffuse = -1
+        self.currenttime = 0
 
     def setUniformPosition(self, position):
         gl.glUniform2f( self.uniformLocation_ObjectPosition, position.x, position.y )
@@ -78,3 +80,8 @@ class Shader:
             gl.glActiveTexture( gl.GL_TEXTURE12 )
             gl.glBindTexture( gl.GL_TEXTURE_2D, texture )
             gl.glUniform1i( self.uniformLocation_TextureDiffuse, 12 )
+
+    def setUniformTime(self, time):
+        if self.currenttime != time:
+            self.currenttime = time
+            gl.glUniform1f( self.uniformLocation_Time, time )
