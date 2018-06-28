@@ -92,14 +92,14 @@ class Tilemap():
 
                 # Always draw a floor tile before drawing the walls/boxes/etc.
                 if self.tilemapGround[y * self.width + x] == GroundTypes.Goal:
-                    self.game.sprite.draw( position, vec2( self.tileSize.x, self.tileSize.y ), self.game.textureTileGoal )
+                    self.game.sprite.draw( position, vec2( self.tileSize.x, self.tileSize.y ), self.game.textureTileGoal, 0, 0, 0 )
                 else:
-                    self.game.sprite.draw( position, vec2( self.tileSize.x, self.tileSize.y ), self.game.textureTileFloor )
+                    self.game.sprite.draw( position, vec2( self.tileSize.x, self.tileSize.y ), self.game.textureTileFloor, 0, 0, 0 )
 
                 # Check the tile type for this grid position and draw the texture if it's not empty.
                 textureToUse = self.getTilePropertiesForTilePosition( x, y ).texture
                 if textureToUse != None:
-                    self.game.sprite.draw( position, vec2( self.tileSize.x, self.tileSize.y ), textureToUse )
+                    self.game.sprite.draw( position, vec2( self.tileSize.x, self.tileSize.y ), textureToUse, 0, 0, 0 )
 
     def checkIfSolved(self):
         # Reset the solved flag, we'll set it again if the board checks out.

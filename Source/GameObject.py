@@ -18,4 +18,4 @@ class GameObject:
         self.position.y += self.direction.y * self.speed * deltaTime
 
     def draw(self):
-        self.sprite.draw( self.position, self.scale, self.texture )
+        self.sprite.draw( self.position, self.scale, self.texture, 0, 0, 0 )

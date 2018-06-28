@@ -45,7 +45,7 @@ class Sprite:
         gl.glBindBuffer( gl.GL_ARRAY_BUFFER, 0 )
         gl.glUseProgram( 0 )
 
-    def draw(self, position, scale, texture):
+    def draw(self, position, scale, texture, time, percentage, texture2):
         # Setup for draw.
         # Moved to Main.py since this stuff doesn't change between sprites.
         # Now only done once per frame, which should work as long as we only have 1 shader and sprite.
@@ -57,6 +57,10 @@ class Sprite:
         self.shader.setUniformUVScale( texture.UVScale )
         self.shader.setUniformUVOffset( texture.UVOffset )
         self.shader.setUniformTextureDiffuse( texture.textureHandle )
+        if texture2 != 0:
+            self.shader.setUniformTextureOther( texture2.textureHandle )
+        self.shader.setUniformTime( time )
+        self.shader.setUniformPercentage( percentage )
 
         # Draw the sprite.
         gl.glDrawArrays( gl.GL_TRIANGLE_STRIP, 0, 4 )

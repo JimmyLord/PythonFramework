@@ -48,13 +48,17 @@ class Shader:
         self.uniformLocation_UVScale = gl.glGetUniformLocation( self.shaderProgram, "u_UVScale" )
         self.uniformLocation_UVOffset = gl.glGetUniformLocation( self.shaderProgram, "u_UVOffset" )
         self.uniformLocation_TextureDiffuse = gl.glGetUniformLocation( self.shaderProgram, "u_TextureDiffuse" )
+        self.uniformLocation_TextureOther = gl.glGetUniformLocation( self.shaderProgram, "u_TextureOther" )
         self.uniformLocation_Time = gl.glGetUniformLocation( self.shaderProgram, "u_Time" )
+        self.uniformLocation_Percentage = gl.glGetUniformLocation( self.shaderProgram, "u_Percentage" )
 
         self.currentScale = vec2( 0, 0 )
         self.currentUVScale = vec2( 0, 0 )
         self.currentUVOffset = vec2( 0, 0 )
         self.currentTextureDiffuse = -1
-        self.currenttime = 0
+        self.currentTextureOther = -1
+        self.currentTime = 0
+        self.currentPercentage = 0
 
     def setUniformPosition(self, position):
         gl.glUniform2f( self.uniformLocation_ObjectPosition, position.x, position.y )
@@ -81,7 +85,19 @@ class Shader:
             gl.glBindTexture( gl.GL_TEXTURE_2D, texture )
             gl.glUniform1i( self.uniformLocation_TextureDiffuse, 12 )
 
+    def setUniformTextureOther(self, texture):
+        if self.currentTextureOther != texture:
+            self.currentTextureOther = texture
+            gl.glActiveTexture( gl.GL_TEXTURE13 )
+            gl.glBindTexture( gl.GL_TEXTURE_2D, texture )
+            gl.glUniform1i( self.uniformLocation_TextureOther, 13 )
+
     def setUniformTime(self, time):
-        if self.currenttime != time:
-            self.currenttime = time
+        if self.currentTime != time:
+            self.currentTime = time
             gl.glUniform1f( self.uniformLocation_Time, time )
+
+    def setUniformPercentage(self, percentage):
+        if self.currentPercentage != percentage:
+            self.currentPercentage = percentage
+            gl.glUniform1f( self.uniformLocation_Percentage, percentage )
