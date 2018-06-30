@@ -6,14 +6,18 @@ class WaterMesh:
         # Store the shader object as a member.
         self.shader = shader
 
-        # Define the water vertices. Set up as a Triangle Fan.
-        self.numberOfVertices = 100 + 2
+        # Define the water vertices. Set up as a Triangle Strip.
+        # Vertex order:
+        # 0 2 4 6 ...
+        # 1 3 5 7 ...        
+        numberOfColumns = 50
+        self.numberOfVertices = numberOfColumns * 2
         vertices = []
-        
-        vertices.extend( [ -0.5, -0.5,  0.0, 0.0 ] ) # bottom left
-        for x in range(0,self.numberOfVertices - 2):
-            vertices.extend( [ -0.5 + (1.0 * x/(self.numberOfVertices - 3)), 0.5,  x/(self.numberOfVertices - 3), 1.0 ] )
-        vertices.extend( [ 0.5, -0.5,  1.0, 0.0 ] ) # bottom right
+
+        for x in range( 0, numberOfColumns ):
+            #                                 X                        Y               U             V
+            vertices.extend( [ -0.5 + (1.0 * x/(numberOfColumns-1)),  0.5,   x/(numberOfColumns-1), 1.0 ] ) # Top
+            vertices.extend( [ -0.5 + (1.0 * x/(numberOfColumns-1)), -0.5,   x/(numberOfColumns-1), 0.0 ] ) # Bottom
 
         # Copy the vertex info into a VBO.
         self.VBO = gl.glGenBuffers( 1 )
@@ -63,7 +67,7 @@ class WaterMesh:
         self.shader.setUniformTime( time )
 
         # Draw the sprite.
-        gl.glDrawArrays( gl.GL_TRIANGLE_FAN, 0, self.numberOfVertices )
+        gl.glDrawArrays( gl.GL_TRIANGLE_STRIP, 0, self.numberOfVertices )
 
         # Cleanup the GL state after drawing.
         # Moved to Main.py since this stuff doesn't change between sprites.
