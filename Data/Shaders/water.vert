@@ -27,4 +27,7 @@ void main()
     gl_Position = vec4( clipSpacePosition, 0, 1 );
 
     v_UV = a_UV * u_UVScale + u_UVOffset;
+
+    v_UV.x += u_Time * 0.02 + sin( u_Time ) * 0.004;
+    v_UV.y += sin( u_Time ) * 0.02;
 }

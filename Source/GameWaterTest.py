@@ -23,7 +23,7 @@ class GameWaterTest(GameBase):
 
         self.waterShader = Shader( "Data/Shaders/water.vert", "Data/Shaders/water.frag" )
         self.waterMesh = WaterMesh( self.waterShader )
-        self.waterTexture = Texture( filename="Data/Textures/player.png" )
+        self.waterTexture = Texture( filename="Data/Textures/water.png" )
         self.totalTimeElapsed = 0
 
     def onEvent(self, event):
