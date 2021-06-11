@@ -18,7 +18,11 @@ class Core:
     def processEvents(self):
         # Process all pygame events, pass each of them into the Game class.
         for event in pygame.event.get():
-            self.imGuiManager.process_event( event )
+            # HACK: This condition is another hack for some broken interactions between pygame and imgui.
+            # The other is in the main function below.
+            if event.type != pygame.KEYDOWN and event.type != pygame.KEYUP:
+                self.imGuiManager.process_event( event )
+
             if event.type == pygame.QUIT:
                 self.running = False       
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
@@ -51,7 +55,7 @@ class Core:
         imgui.end()
 
         # Uncomment this to see what imgui can do.
-        # imgui.show_test_window()
+        #imgui.show_test_window()
 
         # Calculate deltaTime and update all game objects by that much time.
         currentTime = pygame.time.get_ticks()
@@ -82,6 +86,7 @@ class Core:
 
         # Draw imgui windows.
         imgui.render()
+        self.imGuiManager.render( imgui.get_draw_data() )
 
         # Display what we drew.
         pygame.display.flip()
@@ -104,13 +109,29 @@ class Core:
         self.frameResetTime = self.timeAtStartOfLastFrame
 
         # Setup some imgui stuff.
+        imgui.create_context()
         self.imGuiManager = PygameRenderer()
         io = imgui.get_io()
         io.fonts.add_font_default()
         io.display_size = size
 
+        # HACK: Unsetting some "out of range" keys set up by Pygame. Valid range for keycodes is -1 to 512.
+        # This will likely break imgui keyboard support, but I didn't really test.
+        io.key_map[1] = -1
+        io.key_map[2] = -1
+        io.key_map[3] = -1
+        io.key_map[4] = -1
+        io.key_map[5] = -1
+        io.key_map[6] = -1
+        io.key_map[7] = -1
+        io.key_map[8] = -1
+        #print( 'io.key_map:', [k for k in io.key_map] )
+
         # Create an instance of our Game class.
-        self.game = GameDissolve.GameDissolve()
+        #self.game = GameSimple.GameSimple()
+        self.game = GameSokoban.GameSokoban()
+        #self.game = GameWaterTest.GameWaterTest()
+        #self.game = GameDissolve.GameDissolve()
 
         # Main game loop: keep looping until Game says it's time to quit.
         self.running = True
